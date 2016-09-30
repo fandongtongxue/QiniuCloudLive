@@ -8,7 +8,7 @@
 
 #import "LiveManager.h"
 
-#define kGetStreamJsonUrl @"http://fandong.me/live/example/getStreamJson.php"
+#define kGetStreamJsonUrl @"http://fandong.me/App/QiniuCloudLive/pili-sdk-php-master/example/createStream.php"
 
 @implementation LiveManager
 
@@ -22,15 +22,13 @@
 }
 
 - (void)getRtmpAddresssuccessBlock:(void(^)(NSDictionary *responseDict))successBlock failBlock:(void(^)(NSError *error))failBlock{
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    [manager GET:kGetStreamJsonUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        successBlock(dict);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    [[BaseNetworking shareInstance] GET:kGetStreamJsonUrl dict:nil succeed:^(id data) {
+        if (data && [data isKindOfClass:[NSDictionary class]] && [[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
+            successBlock([(NSDictionary *)data objectForKey:@"data"]);
+        }else{
+            failBlock([NSError errorWithDomain:@"com.QiniuCloudLive" code:1 userInfo:@{@"info":@"获取直播地址失败"}]);
+        }
+    } failure:^(NSError *error) {
         failBlock(error);
     }];
 }

@@ -18,5 +18,6 @@
 #import "AFNetworking.h"
 #import "WBHttpRequest.h"
 #import "WBHttpRequest+WeiboUser.h"
+#import "BaseNetworking.h"
 
 #endif /* AppHeader_h */
