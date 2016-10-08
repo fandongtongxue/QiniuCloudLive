@@ -8,7 +8,7 @@
 
 #import "PreViewViewController.h"
 #import "LiveManager.h"
-#import <PLCameraStreamingKit/PLCameraStreamingKit.h>
+#import <PLMediaStreamingKit/PLMediaStreamingKit.h>
 #import "LiveViewController.h"
 
 @interface PreViewViewController ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate>

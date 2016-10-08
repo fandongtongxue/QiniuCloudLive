@@ -7,7 +7,7 @@
 //
 
 #import "QiniuLiveManager.h"
-#import <PLCameraStreamingKit/PLCameraStreamingKit.h>
+#import <PLMediaStreamingKit/PLMediaStreamingKit.h>
 
 @implementation QiniuLiveManager
 

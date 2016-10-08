@@ -7,7 +7,7 @@
 //
 
 #import "LiveViewController.h"
-#import <PLCameraStreamingKit/PLCameraStreamingKit.h>
+#import <PLMediaStreamingKit/PLMediaStreamingKit.h>
 #import "LiveManager.h"
 
 @interface LiveViewController ()<PLCameraStreamingSessionDelegate>
