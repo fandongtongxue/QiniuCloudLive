@@ -10,6 +10,8 @@
 #import "WeiboManager.h"
 #import "NetworkManager.h"
 
+#define kCreateUserUrl @"http://fandong.me/App/QiniuCloudLive/pili-sdk-php-master/example/createUser.php"
+
 @interface UserViewController ()<UIActionSheetDelegate,WeiboManagerDelegate>
 
 @end
@@ -77,8 +79,14 @@
 //        expirationDate = "2021-08-14 02:58:32 +0000";
 //        userID = 1751793313;
 //    }
-    [WBHttpRequest requestForUserProfile:userInfo[@"userID"] withAccessToken:userInfo[@"accessToken"] andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        DLOG(@"微博用户信息:%@",result);
+    NSDictionary *dict = @{@"userId":userInfo[@"userID"],
+                                          @"accessToken":userInfo[@"accessToken"],
+                                          @"expirationDate":userInfo[@"expirationDate"]
+                                         };
+    [[BaseNetworking shareInstance] GET:kCreateUserUrl dict:dict succeed:^(id data) {
+        
+    } failure:^(NSError *error) {
+        
     }];
 }
 
