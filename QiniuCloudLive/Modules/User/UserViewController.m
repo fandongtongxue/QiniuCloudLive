@@ -12,6 +12,8 @@
 
 #define kCreateUserUrl @"http://fandong.me/App/QiniuCloudLive/pili-sdk-php-master/example/createUser.php"
 
+#define kGetUserUrl @"http://fandong.me/App/QiniuCloudLive/pili-sdk-php-master/example/getUser.php"
+
 @interface UserViewController ()<UIActionSheetDelegate,WeiboManagerDelegate>
 
 @end
@@ -79,26 +81,35 @@
 //        expirationDate = "2021-08-14 02:58:32 +0000";
 //        userID = 1751793313;
 //    }
-    NSDictionary *dict = @{@"userId":userInfo[@"userID"],
+    NSDictionary *createDict = @{@"userId":userInfo[@"userID"],
                                           @"accessToken":userInfo[@"accessToken"],
                                           @"expirationDate":userInfo[@"expirationDate"]
                                          };
-    [[BaseNetworking shareInstance] GET:kCreateUserUrl dict:dict succeed:^(id data) {
-        
+    [[BaseNetworking shareInstance] GET:kCreateUserUrl dict:createDict succeed:^(id data) {
+        if ([[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
+            NSDictionary *getDict = @{@"userId":createDict[@"userId"]};
+            [[BaseNetworking shareInstance] GET:kGetUserUrl dict:getDict succeed:^(id data) {
+                if ([[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
+                    [self showAlert:[NSString stringWithFormat:@"UID:%@",[[[(NSDictionary *)data objectForKey:@"data"] objectForKey:@"userInfo"] objectForKey:@"uid"]]];
+                }
+            } failure:^(NSError *error) {
+                [self showAlert:[NSString stringWithFormat:@"%@",error]];
+            }];
+        }
     } failure:^(NSError *error) {
-        
+        [self showAlert:[NSString stringWithFormat:@"%@",error]];
     }];
 }
 
 - (void)showAlert:(NSString *)alertString{
     if (IOS8_OR_LATER) {
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"微博信息" message:alertString preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:alertString message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alertVC addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [alertVC dismissViewControllerAnimated:YES completion:nil];
         }]];
         [self presentViewController:alertVC animated:YES completion:nil];
     }else{
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"微博信息" message:alertString delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertString message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
 }
