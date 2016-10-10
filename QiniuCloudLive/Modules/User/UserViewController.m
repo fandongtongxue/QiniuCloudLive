@@ -90,7 +90,7 @@
             NSDictionary *getDict = @{@"userId":createDict[@"userId"]};
             [[BaseNetworking shareInstance] GET:kGetUserUrl dict:getDict succeed:^(id data) {
                 if ([[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
-                    [self showAlert:[NSString stringWithFormat:@"UID:%@",[[[(NSDictionary *)data objectForKey:@"data"] objectForKey:@"userInfo"] objectForKey:@"uid"]]];
+                    [self showAlert:[NSString stringWithFormat:@"UID:%@",(NSDictionary *)data[@"data"][@"uid"]]];
                 }
             } failure:^(NSError *error) {
                 [self showAlert:[NSString stringWithFormat:@"%@",error]];
