@@ -110,14 +110,14 @@
                                           @"userExpirationDate":userInfo[@"expirationDate"],
                                           @"userLoginType":@"weibo"};
     [[BaseNetworking shareInstance] GET:kCreateUserUrl dict:createDict succeed:^(id data) {
-        if ([[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
-            [self showAlert:data];
-            [self.userImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userImg"]]] placeholderImage:[UIImage imageNamed:@"uc_img_default.jpg"]];
-            self.userNameLabel.text = [NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userName"]];
+        NSDictionary *dict = (NSDictionary *)data;
+        if ([[dict objectForKey:@"status"] integerValue] == 1) {
+            [self.userImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",dict[@"data"][@"userImg"]]] placeholderImage:[UIImage imageNamed:@"uc_img_default.jpg"]];
+            self.userNameLabel.text = [NSString stringWithFormat:@"%@",dict[@"data"][@"userName"]];
             self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"退出登录" style:UIBarButtonItemStylePlain target:self action:@selector(toLogOut)];
             [UserDefault saveBoolObject:YES ForKey:kUserDefaultsKeyUserIsLogin];
-            [UserDefault saveObject:[NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userName"]] ForKey:kUserDefaultsKeyUserName];
-            [UserDefault saveObject:[NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userImg"]] ForKey:kUserDefaultsKeyUserImg];
+            [UserDefault saveObject:[NSString stringWithFormat:@"%@",dict[@"data"][@"userName"]] ForKey:kUserDefaultsKeyUserName];
+            [UserDefault saveObject:[NSString stringWithFormat:@"%@",dict[@"data"][@"userImg"]] ForKey:kUserDefaultsKeyUserImg];
         }
     } failure:^(NSError *error) {
         [self showAlert:[NSString stringWithFormat:@"%@",error]];
