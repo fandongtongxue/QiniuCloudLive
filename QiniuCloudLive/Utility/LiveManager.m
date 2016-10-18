@@ -21,7 +21,7 @@
     return manager;
 }
 
-- (void)getRtmpAddresssuccessBlock:(void(^)(NSDictionary *responseDict))successBlock failBlock:(void(^)(NSError *error))failBlock{
+- (void)getRtmpAddress:(NSDictionary *)dict SuccessBlock:(void(^)(NSDictionary *responseDict))successBlock failBlock:(void(^)(NSError *error))failBlock{
     [[BaseNetworking shareInstance] GET:kGetStreamJsonUrl dict:nil succeed:^(id data) {
         if (data && [data isKindOfClass:[NSDictionary class]] && [[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
             successBlock([(NSDictionary *)data objectForKey:@"data"]);

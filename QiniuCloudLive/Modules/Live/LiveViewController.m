@@ -9,6 +9,7 @@
 #import "LiveViewController.h"
 #import <PLMediaStreamingKit/PLMediaStreamingKit.h>
 #import "LiveManager.h"
+#import "AppHelper.h"
 
 @interface LiveViewController ()<PLCameraStreamingSessionDelegate>
 
@@ -52,7 +53,9 @@
 - (void)initSession{
     __weak typeof(self) weakSelf = self;
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[LiveManager manager] getRtmpAddresssuccessBlock:^(NSDictionary *responseDict) {
+    NSDictionary *dict = @{@"title":@"asdasdasdasads",
+                                          @"uuid":[AppHelper uuid]};
+    [[LiveManager manager] getRtmpAddress:dict SuccessBlock:^(NSDictionary *responseDict) {
         PLStream *stream = [PLStream streamWithJSON:responseDict];
         
         PLVideoCaptureConfiguration *videoCaptureConfiguration = [PLVideoCaptureConfiguration defaultConfiguration];

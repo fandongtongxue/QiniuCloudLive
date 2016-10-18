@@ -19,5 +19,8 @@
 #import "WBHttpRequest.h"
 #import "WBHttpRequest+WeiboUser.h"
 #import "BaseNetworking.h"
+#import "UIView+Extension.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "AppHelper.h"
 
 #endif /* AppHeader_h */

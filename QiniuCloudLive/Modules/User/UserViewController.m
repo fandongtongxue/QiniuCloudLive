@@ -12,9 +12,10 @@
 
 #define kCreateUserUrl @"http://fandong.me/App/QiniuCloudLive/pili-sdk-php-master/example/createUser.php"
 
-#define kGetUserUrl @"http://fandong.me/App/QiniuCloudLive/pili-sdk-php-master/example/getUser.php"
-
 @interface UserViewController ()<UIActionSheetDelegate,WeiboManagerDelegate>
+
+@property (nonatomic, strong) UIImageView *userImageView;
+@property (nonatomic, strong) UILabel *userNameLabel;
 
 @end
 
@@ -30,10 +31,31 @@
 - (void)initNavigationBar{
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"个人中心";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toLogin)];
+    if ([AppHelper isLogin]) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"退出登录" style:UIBarButtonItemStylePlain target:self action:@selector(toLogOut)];
+    }else{
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toLogin)];
+    }
 }
 
 - (void)initSubViews{
+    UIImageView *userImageView = [[UIImageView alloc]initWithFrame:CGRectMake((kScreenSizeWidth - 80)/2, 20, 80, 80)];
+    [self.view addSubview:userImageView];
+    self.userImageView = userImageView;
+    UILabel *userNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, userImageView.bottom + 10, kScreenSizeWidth - 40, 20)];
+    userNameLabel.textColor = [UIColor blackColor];
+    userNameLabel.font = [UIFont systemFontOfSize:15];
+    userNameLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:userNameLabel];
+    self.userNameLabel = userNameLabel;
+    
+    if ([AppHelper isLogin]) {
+        [self.userNameLabel setText:[UserDefault objectForKey:kUserDefaultsKeyUserName]];
+        [self.userImageView sd_setImageWithURL:[NSURL URLWithString:[UserDefault objectForKey:kUserDefaultsKeyUserImg]] placeholderImage:[UIImage imageNamed:@"uc_img_default.jpg"]];
+    }else{
+        [self.userNameLabel setText:@"未登录"];
+        [self.userImageView setImage:[UIImage imageNamed:@"uc_img_default.jpg"]];
+    }
     
 }
 
@@ -51,6 +73,13 @@
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",nil];
         [actionSheet showInView:self.view];
     }
+}
+
+- (void)toLogOut{
+    [UserDefault saveBoolObject:NO ForKey:kUserDefaultsKeyUserIsLogin];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(toLogin)];
+    [self.userNameLabel setText:@"未登录"];
+    [self.userImageView setImage:[UIImage imageNamed:@"uc_img_default.jpg"]];
 }
 
 - (void)login:(SocialLoginType)type{
@@ -76,42 +105,31 @@
 }
 
 - (void)weiboManager:(WeiboManager *)manager userInfo:(NSDictionary *)userInfo{
-//    {
-//        accessToken = "2.00r92YuBwniE6B0d2405255f0WN7O1";
-//        expirationDate = "2021-08-14 02:58:32 +0000";
-//        userID = 1751793313;
-//    }
     NSDictionary *createDict = @{@"userId":userInfo[@"userID"],
-                                          @"accessToken":userInfo[@"accessToken"],
-                                          @"expirationDate":userInfo[@"expirationDate"]
-                                         };
+                                          @"userAccessToken":userInfo[@"accessToken"],
+                                          @"userExpirationDate":userInfo[@"expirationDate"],
+                                          @"userLoginType":@"weibo"};
     [[BaseNetworking shareInstance] GET:kCreateUserUrl dict:createDict succeed:^(id data) {
         if ([[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
-            NSDictionary *getDict = @{@"userId":createDict[@"userId"]};
-            [[BaseNetworking shareInstance] GET:kGetUserUrl dict:getDict succeed:^(id data) {
-                if ([[(NSDictionary *)data objectForKey:@"status"] integerValue] == 1) {
-                    [self showAlert:[NSString stringWithFormat:@"UID:%@",(NSDictionary *)data[@"data"][@"uid"]]];
-                }
-            } failure:^(NSError *error) {
-                [self showAlert:[NSString stringWithFormat:@"%@",error]];
-            }];
+            [self showAlert:data];
+            [self.userImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userImg"]]] placeholderImage:[UIImage imageNamed:@"uc_img_default.jpg"]];
+            self.userNameLabel.text = [NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userName"]];
+            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"退出登录" style:UIBarButtonItemStylePlain target:self action:@selector(toLogOut)];
+            [UserDefault saveBoolObject:YES ForKey:kUserDefaultsKeyUserIsLogin];
+            [UserDefault saveObject:[NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userName"]] ForKey:kUserDefaultsKeyUserName];
+            [UserDefault saveObject:[NSString stringWithFormat:@"%@",(NSDictionary *)data[@"userImg"]] ForKey:kUserDefaultsKeyUserImg];
         }
     } failure:^(NSError *error) {
         [self showAlert:[NSString stringWithFormat:@"%@",error]];
     }];
 }
 
-- (void)showAlert:(NSString *)alertString{
-    if (IOS8_OR_LATER) {
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:alertString message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [alertVC addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [alertVC dismissViewControllerAnimated:YES completion:nil];
-        }]];
-        [self presentViewController:alertVC animated:YES completion:nil];
-    }else{
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertString message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
+- (void)showAlert:(id)alert{
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@",alert] message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alertVC dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

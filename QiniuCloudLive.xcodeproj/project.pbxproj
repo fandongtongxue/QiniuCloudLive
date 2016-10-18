@@ -44,6 +44,9 @@
 		AF4A32F31D9DF2CC00F50825 /* UserDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4A32D51D9DF2CC00F50825 /* UserDefault.m */; };
 		AF4A32F41D9DF2CC00F50825 /* WeiboManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4A32D71D9DF2CC00F50825 /* WeiboManager.m */; };
 		AF4A32FE1D9E013600F50825 /* BaseNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4A32FD1D9E013600F50825 /* BaseNetworking.m */; };
+		AF770B8C1DB467F00098FEEF /* AppHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AF770B8B1DB467F00098FEEF /* AppHelper.m */; };
+		AF770B901DB468620098FEEF /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = AF770B8F1DB468620098FEEF /* SSKeychain.m */; };
+		AF9FA70E1DB4CD9E003FADAA /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9FA70D1DB4CD9E003FADAA /* UIView+Extension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +128,12 @@
 		AF4A32FB1D9DFFCA00F50825 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		AF4A32FC1D9E013600F50825 /* BaseNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNetworking.h; sourceTree = "<group>"; };
 		AF4A32FD1D9E013600F50825 /* BaseNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNetworking.m; sourceTree = "<group>"; };
+		AF770B8A1DB467F00098FEEF /* AppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppHelper.h; sourceTree = "<group>"; };
+		AF770B8B1DB467F00098FEEF /* AppHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppHelper.m; sourceTree = "<group>"; };
+		AF770B8E1DB468620098FEEF /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
+		AF770B8F1DB468620098FEEF /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
+		AF9FA70C1DB4CD9E003FADAA /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
+		AF9FA70D1DB4CD9E003FADAA /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
 		FA5A4C7552522B7738E885E4 /* Pods-QiniuCloudLive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiniuCloudLive.release.xcconfig"; path = "Pods/Target Support Files/Pods-QiniuCloudLive/Pods-QiniuCloudLive.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -206,6 +215,8 @@
 		AF4A32861D9DF2CB00F50825 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				AF9FA70C1DB4CD9E003FADAA /* UIView+Extension.h */,
+				AF9FA70D1DB4CD9E003FADAA /* UIView+Extension.m */,
 				AF4A32871D9DF2CB00F50825 /* UIColor+FD.h */,
 				AF4A32881D9DF2CB00F50825 /* UIColor+FD.m */,
 			);
@@ -315,6 +326,7 @@
 		AF4A32A91D9DF2CB00F50825 /* ThirdPart */ = {
 			isa = PBXGroup;
 			children = (
+				AF770B8D1DB468620098FEEF /* SSKeyChain */,
 				AF4A32AA1D9DF2CB00F50825 /* MBProgressHUD */,
 				AF4A32AD1D9DF2CB00F50825 /* RealReachability */,
 			);
@@ -404,8 +416,19 @@
 				AF4A32D51D9DF2CC00F50825 /* UserDefault.m */,
 				AF4A32D61D9DF2CC00F50825 /* WeiboManager.h */,
 				AF4A32D71D9DF2CC00F50825 /* WeiboManager.m */,
+				AF770B8A1DB467F00098FEEF /* AppHelper.h */,
+				AF770B8B1DB467F00098FEEF /* AppHelper.m */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		AF770B8D1DB468620098FEEF /* SSKeyChain */ = {
+			isa = PBXGroup;
+			children = (
+				AF770B8E1DB468620098FEEF /* SSKeychain.h */,
+				AF770B8F1DB468620098FEEF /* SSKeychain.m */,
+			);
+			path = SSKeyChain;
 			sourceTree = "<group>";
 		};
 		F173A364EB20EA29400F6B0D /* Pods */ = {
@@ -500,7 +523,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A8A26B743E333433226046CD /* [CP] Embed Pods Frameworks */ = {
@@ -549,6 +572,7 @@
 				AF4A32601D9DEFCB00F50825 /* ViewController.m in Sources */,
 				AF4A32F31D9DF2CC00F50825 /* UserDefault.m in Sources */,
 				AF4A32D81D9DF2CC00F50825 /* UIColor+FD.m in Sources */,
+				AF770B901DB468620098FEEF /* SSKeychain.m in Sources */,
 				AF4A32F01D9DF2CC00F50825 /* NetworkManager.m in Sources */,
 				AF4A325D1D9DEFCB00F50825 /* AppDelegate.m in Sources */,
 				AF4A32DD1D9DF2CC00F50825 /* StreamViewController.m in Sources */,
@@ -557,6 +581,7 @@
 				AF4A32E31D9DF2CC00F50825 /* LocalConnection.m in Sources */,
 				AF4A325A1D9DEFCB00F50825 /* main.m in Sources */,
 				AF4A32E61D9DF2CC00F50825 /* ReachState.m in Sources */,
+				AF9FA70E1DB4CD9E003FADAA /* UIView+Extension.m in Sources */,
 				AF4A32F21D9DF2CC00F50825 /* SocialManager.m in Sources */,
 				AF4A32E71D9DF2CC00F50825 /* ReachStateLoading.m in Sources */,
 				AF4A32DF1D9DF2CC00F50825 /* UserViewController.m in Sources */,
@@ -571,6 +596,7 @@
 				AF4A32EF1D9DF2CC00F50825 /* LiveManager.m in Sources */,
 				AF4A32F11D9DF2CC00F50825 /* QiniuLiveManager.m in Sources */,
 				AF4A32E91D9DF2CC00F50825 /* ReachStateUnReachable.m in Sources */,
+				AF770B8C1DB467F00098FEEF /* AppHelper.m in Sources */,
 				AF4A32EA1D9DF2CC00F50825 /* ReachStateWIFI.m in Sources */,
 				AF4A32E21D9DF2CC00F50825 /* MBProgressHUD.m in Sources */,
 			);

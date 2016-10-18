@@ -14,4 +14,8 @@
 
 + (id)objectForKey:(NSString *)key;
 
++ (void)saveBoolObject:(BOOL)object ForKey:(NSString *)key;
+
++ (BOOL)boolObjectForKey:(NSString *)key;
+
 @end

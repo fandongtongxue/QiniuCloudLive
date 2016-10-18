@@ -13,6 +13,9 @@
 
 #define IOS8_OR_LATER   ( [[[UIDevice currentDevice] systemVersion] compare:@"8.0"] != NSOrderedAscending )
 #define kAppVersion                          ([[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"])
+#define kUserDefaultsKeyUserIsLogin  @"kUserDefaultsKeyUserIsLogin"
+#define kUserDefaultsKeyUserName          @"kUserDefaultsKeyUserName"
+#define kUserDefaultsKeyUserImg       @"kUserDefaultsKeyUserImg"
 
 #define OPEN_LOG
 #ifdef  OPEN_LOG

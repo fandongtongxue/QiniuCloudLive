@@ -6,4 +6,5 @@ pod 'PLMediaStreamingKit'
 pod 'AFNetworking', '~> 3.0'
 pod 'PLPlayerKit'
 pod 'WeiboSDK'
+pod 'SDWebImage'
 end

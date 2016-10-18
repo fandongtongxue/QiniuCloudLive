@@ -22,4 +22,14 @@
     return object;
 }
 
++ (void)saveBoolObject:(BOOL)object ForKey:(NSString *)key{
+    [UserDefaults setBool:object forKey:key];
+    [UserDefaults synchronize];
+}
+
++ (BOOL)boolObjectForKey:(NSString *)key{
+    BOOL object = [UserDefaults boolForKey:key];
+    return object;
+}
+
 @end

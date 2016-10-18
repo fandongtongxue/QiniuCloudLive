@@ -12,6 +12,6 @@
 
 + (LiveManager *)manager;
 
-- (void)getRtmpAddresssuccessBlock:(void(^)(NSDictionary *responseDict))successBlock failBlock:(void(^)(NSError *error))failBlock;
+- (void)getRtmpAddress:(NSDictionary *)dict SuccessBlock:(void(^)(NSDictionary *responseDict))successBlock failBlock:(void(^)(NSError *error))failBlock;
 
 @end
